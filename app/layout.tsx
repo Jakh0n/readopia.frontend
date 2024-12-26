@@ -32,7 +32,7 @@ export default function RootLayout({ children }: ChildProps) {
 					disableTransitionOnChange
 				>
 					<Navbar />
-					<main>{children}</main>
+					<main className='container mt-24 max-w-7xl'>{children}</main>
 				</ThemeProvider>
 			</body>
 		</html>
