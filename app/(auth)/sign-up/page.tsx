@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { registerScheme } from '@/lib/validation'
+import { registerSchema } from '@/lib/validation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Separator } from '@radix-ui/react-separator'
 import Link from 'next/link'
@@ -19,14 +19,14 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 function SignUp() {
-	const form = useForm<z.infer<typeof registerScheme>>({
-		resolver: zodResolver(registerScheme),
+	const form = useForm<z.infer<typeof registerSchema>>({
+		resolver: zodResolver(registerSchema),
 		defaultValues: {
 			email: '',
 			password: '',
 		},
 	})
-	function onSubmit(values: z.infer<typeof registerScheme>) {
+	function onSubmit(values: z.infer<typeof registerSchema>) {
 		console.log(values)
 	}
 	return (

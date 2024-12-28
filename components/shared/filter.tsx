@@ -1,7 +1,7 @@
 'use client'
-import React, { useCallback } from 'react'
-import { Input } from '../ui/input'
+
 import { Search } from 'lucide-react'
+import { Input } from '../ui/input'
 import {
 	Select,
 	SelectContent,
@@ -9,13 +9,19 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from '../ui/select'
-import { categories } from '@/constants'
+import { cn, formUrlQuery, removeUrlQuery } from '@/lib/utils'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { formUrlQuery, removeUrlQuery } from '@/lib/utils'
 import { debounce } from 'lodash'
-function Filter() {
-	const router = useRouter()
+import { FC, useCallback } from 'react'
+import { categories } from '@/constants'
+
+interface Props {
+	showCategory?: boolean
+}
+const Filter: FC<Props> = ({ showCategory }) => {
 	const searchParams = useSearchParams()
+	const router = useRouter()
+
 	const onFilterChange = (value: string) => {
 		const newUrl = formUrlQuery({
 			key: 'filter',
@@ -24,15 +30,16 @@ function Filter() {
 		})
 		router.push(newUrl)
 	}
+
 	const onCategoryChange = (value: string) => {
 		const newUrl = formUrlQuery({
 			key: 'category',
 			params: searchParams.toString(),
 			value,
 		})
-
 		router.push(newUrl)
 	}
+
 	const onInputSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const value = e.target.value
 		const newUrl = formUrlQuery({
@@ -41,6 +48,7 @@ function Filter() {
 			value,
 		})
 		router.push(newUrl)
+
 		if (value === '') {
 			const newUrl = removeUrlQuery({
 				key: 'q',
@@ -49,53 +57,55 @@ function Filter() {
 			router.push(newUrl)
 		}
 	}
+
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	const handleSearchDebounce = useCallback(debounce(onInputSearch, 300), [])
+
 	return (
-		<div className='grid grid-cols-3 max-md:w-full gap-1'>
-			<div className='flex items-center bg-secondary max-md:w-1/2 rounded-md  '>
+		<div
+			className={cn(
+				'gap-1 max-md:w-full grid',
+				showCategory ? 'grid-cols-3' : 'grid-cols-2'
+			)}
+		>
+			<div className='flex items-center bg-secondary max-md:w-1/2 border'>
 				<Input
-					placeholder='Search'
-					className='text-xs border-none  no-focus'
+					placeholder='Qidirish'
+					className='text-xs border-none no-focus'
 					onChange={handleSearchDebounce}
 				/>
-				<Search className='text-muted-foreground mr-2 cursor-pointer' />
+				<Search className='mr-2 cursor-pointer text-muted-foreground' />
 			</div>
+
 			<Select onValueChange={onFilterChange}>
-				<SelectTrigger className='text-xs bg-secondary max-md:w-1/2'>
+				<SelectTrigger className='bg-secondary text-xs max-md:w-1/2'>
 					<SelectValue
-						placeholder='Select Filter'
+						placeholder='Select filter'
 						className='text-muted-foreground'
 					/>
 				</SelectTrigger>
 				<SelectContent>
-					<SelectItem className='cursor-pointer' value='newest'>
-						Newest
-					</SelectItem>
-					<SelectItem className='cursor-pointer' value='oldest'>
-						Oldest
-					</SelectItem>
+					<SelectItem value='newest'>Newest</SelectItem>
+					<SelectItem value='oldest'>Oldest</SelectItem>
 				</SelectContent>
 			</Select>
-			<Select onValueChange={onCategoryChange}>
-				<SelectTrigger className='text-xs bg-secondary max-md:w-1/2'>
-					<SelectValue
-						placeholder='Select Categoriy'
-						className='text-muted-foreground'
-					/>
-				</SelectTrigger>
-				<SelectContent>
-					{categories.map(category => (
-						<SelectItem
-							value={category}
-							key={category}
-							className='cursor-pointer'
-						>
-							{category}
-						</SelectItem>
-					))}
-				</SelectContent>
-			</Select>
+			{showCategory && (
+				<Select onValueChange={onCategoryChange}>
+					<SelectTrigger className='bg-secondary text-xs max-md:w-1/2'>
+						<SelectValue
+							placeholder='Select category'
+							className='text-muted-foreground'
+						/>
+					</SelectTrigger>
+					<SelectContent>
+						{categories.map(category => (
+							<SelectItem value={category} key={category}>
+								{category}
+							</SelectItem>
+						))}
+					</SelectContent>
+				</Select>
+			)}
 		</div>
 	)
 }

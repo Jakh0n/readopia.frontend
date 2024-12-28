@@ -11,7 +11,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
-import { loginScheme } from '@/lib/validation'
+import { loginSchema } from '@/lib/validation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
 import React from 'react'
@@ -19,14 +19,14 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 function SignIn() {
-	const form = useForm<z.infer<typeof loginScheme>>({
-		resolver: zodResolver(loginScheme),
+	const form = useForm<z.infer<typeof loginSchema>>({
+		resolver: zodResolver(loginSchema),
 		defaultValues: {
 			email: '',
 			password: '',
 		},
 	})
-	function onSubmit(values: z.infer<typeof loginScheme>) {
+	function onSubmit(values: z.infer<typeof loginSchema>) {
 		console.log(values)
 	}
 	return (

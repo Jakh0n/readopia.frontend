@@ -1,26 +1,28 @@
-import ProductCard from '@/components/card/product.card'
+import WatchListCard from '@/components/card/watch-list.card'
 import Filter from '@/components/shared/filter'
 import Pagination from '@/components/shared/pagination'
 import { Separator } from '@/components/ui/separator'
 import { products } from '@/constants'
 import React from 'react'
 
-function HomePage() {
+const Page = () => {
 	return (
 		<>
-			<div className='flex items-center justify-between'>
-				<h1 className='text-xl font-bold'>Products</h1>
-				<Filter showCategory />
-			</div>
+			<h1 className='text-xl font-bold'>Watch list</h1>
+
 			<Separator className='my-3' />
-			<div className='grid grid-cols-3 gap-4'>
+
+			<Filter showCategory />
+
+			<div className='grid grid-cols-1 md:grid-cols-2 gap-4 mt-3'>
 				{products.map(product => (
-					<ProductCard key={product._id} product={product} />
+					<WatchListCard key={product._id} product={product} />
 				))}
 			</div>
+
 			<Pagination />
 		</>
 	)
 }
 
-export default HomePage
+export default Page
